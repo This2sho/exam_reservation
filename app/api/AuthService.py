@@ -1,16 +1,14 @@
-from fastapi import Depends, HTTPException, Cookie
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from app.api.dto.request.CreateUserRequest import CreateUserRequest
 from app.api.dto.request.LoginRequest import LoginRequest
-from app.database.database import get_db
 from app.domain.User import User
 from app.domain.UserRepository import UserRepository
 
 
 class AuthService:
-    def __init__(self, db: Session = Depends(get_db)):
-        self.db = db
+    def __init__(self, db: Session):
         self.user_repository = UserRepository(db)
 
     def create_user(self, request: CreateUserRequest) -> User:
@@ -24,14 +22,4 @@ class AuthService:
         user = self.user_repository.get_by_email(request.email)
         if not user:
             raise HTTPException(status_code=401, detail="존재하지 않는 회원입니다.")
-        return user
-
-    def get_current_user(self, x_user_id: str = Cookie(alias="X-User-ID")) -> User:
-        if not x_user_id:
-            raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
-
-        user = self.user_repository.get_by_id(int(x_user_id))
-        if not user:
-            raise HTTPException(status_code=401, detail="회원을 찾을 수 없습니다.")
-
         return user
