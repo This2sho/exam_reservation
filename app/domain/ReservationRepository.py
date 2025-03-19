@@ -26,6 +26,11 @@ class ReservationRepository:
             self.db.commit()
         return reservation
 
+    def update(self, reservation: Reservation):
+        self.db.commit()
+        self.db.refresh(reservation)
+        return reservation
+
     def get_reservations_in_time_range(self, reservation_date: date, start_time: time, end_time: time) -> List[
         Reservation]:
         return (

@@ -93,6 +93,8 @@ class ReservationService:
         if not ReservationManagement.can_confirm_reservation(user, reservation):
             raise ValueError("예약을 확정할 수 없습니다.")
         reservation.status = ReservationStatus.CONFIRMED
+        self.reservation_repository.update(reservation)
+
 
     def modify_reservation(self, user_id: int, reservation_id: int, request: UpdateReservationRequest):
         user = self.user_repository.get_by_id(user_id)
@@ -104,6 +106,7 @@ class ReservationService:
         reservation.start_time = request.start_time
         reservation.end_time = request.end_time
         reservation.num_participants = request.num_participants
+        self.reservation_repository.update(reservation)
 
     def cancel_reservation(self, user_id: int, reservation_id: int):
         user = self.user_repository.get_by_id(user_id)
