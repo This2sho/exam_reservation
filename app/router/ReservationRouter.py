@@ -57,7 +57,7 @@ def modify_reservation(
     reservation_service.modify_reservation(user_id, reservation_id, request)
     return {"message": "예약이 수정되었습니다."}
 
-@router.delete("/reservations/{reservation_id}", status_code=status.HTTP_200_OK)
+@router.patch("/reservations/{reservation_id}/cancel", status_code=status.HTTP_200_OK)
 def cancel_reservation(
         reservation_id: int,
         db: Session = Depends(get_db),
