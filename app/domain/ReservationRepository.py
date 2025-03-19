@@ -13,6 +13,8 @@ class ReservationRepository:
 
     def create(self, reservation: Reservation):
         self.db.add(reservation)
+        self.db.commit()
+        self.db.refresh(reservation)
         return reservation
 
     def get_by_id(self, reservation_id: int):
@@ -21,6 +23,7 @@ class ReservationRepository:
     def delete(self, reservation: Reservation):
         if reservation:
             self.db.delete(reservation)
+            self.db.commit()
         return reservation
 
     def get_reservations_in_time_range(self, reservation_date: date, start_time: time, end_time: time) -> List[
