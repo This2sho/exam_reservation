@@ -14,7 +14,7 @@ class AuthService:
     def create_user(self, request: CreateUserRequest) -> User:
         existing_user = self.user_repository.get_by_email(request.email)
         if existing_user:
-            raise HTTPException(status_code=400, detail="이미 존재하는 이메일입니다.")
+            raise ValueError("이미 존재하는 이메일입니다.")
         user = User(email=request.email, role=request.role)
         return self.user_repository.create(user)
 
