@@ -1,6 +1,5 @@
 
 from sqlalchemy import Column, BigInteger, String, Enum
-from sqlalchemy.ext.declarative import declarative_base
 from app.domain.UserRole import UserRole
 from app.database.database import Base
 
