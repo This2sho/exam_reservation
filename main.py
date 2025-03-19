@@ -1,13 +1,16 @@
 from fastapi import FastAPI
+from app.database.database import engine, Base
+from app.router.ReservationRouter import router as reservation_router
+from app.router.AuthRouter import router as auth_router
 
-app = FastAPI()
+Base.metadata.create_all(bind=engine)
 
+app = FastAPI(title="Reservation API", version="1.0")
+
+app.include_router(reservation_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/v1")
 
 @app.get("/")
-async def root():
-    return {"message": "Hello World"}
+def health_check():
+    return {"message": "Reservation API is running 🚀"}
 
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
