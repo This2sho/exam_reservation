@@ -19,8 +19,9 @@ class ReservationManagement:
         return (total_reserved + new_participants) <= cls.MAX_PARTICIPANTS
 
     @staticmethod
-    def can_confirm_reservation(user: User, reservation: Reservation) -> bool:
-        return user.is_admin() and reservation.is_requested()
+    def can_confirm_reservation(user: User, reservation: Reservation, existing_reservations: List[Reservation]) -> bool:
+        return user.is_admin() and reservation.is_requested() and ReservationManagement.is_reservation_possible(
+            existing_reservations, reservation.num_participants)
 
     @staticmethod
     def can_modify_reservation(user: User, reservation: Reservation) -> bool:

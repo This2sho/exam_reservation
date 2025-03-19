@@ -94,7 +94,11 @@ class ReservationService:
         user = self.user_repository.get_by_id(user_id)
         reservation = self.reservation_repository.get_by_id(reservation_id)
 
-        if not ReservationManagement.can_confirm_reservation(user, reservation):
+        if not user.is_admin():
+            raise HTTPException(status_code=403, detail="권한이 없습니다.")
+
+        existing_reservations = self.reservation_repository.get_by_date(reservation.date)
+        if not ReservationManagement.can_confirm_reservation(user, reservation, existing_reservations):
             raise ValueError("예약을 확정할 수 없습니다.")
         reservation.status = ReservationStatus.CONFIRMED
         self.reservation_repository.update(reservation)
