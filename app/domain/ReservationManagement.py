@@ -37,7 +37,10 @@ class ReservationManagement:
 
         for hour in range(9, 24):
             start_time = time(hour, 0)
-            end_time = time(hour + 1, 0)
+            if hour == 23:
+                end_time = time(23, 59)
+            else:
+                end_time = time(hour + 1, 0)
 
             reserved_count = sum(
                 res.num_participants
